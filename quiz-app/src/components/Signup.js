@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
 import Profile from './profile';
 import PropTypes from 'prop-types';
-
+import { Link } from 'react-router-dom';
 
 	class Signup_Login extends Component {
 		constructor() {
 			super();
 			this.state = {
 				loginData : {
-					username : " ",
-					password : " ",
+					username : "",
+					password : "",
 				},
 				registerData : {
-					username : " ",
-					password : " ",
+					username : "",
+					password : "",
 				},
 				loggedin : false,
 				registered : false,
@@ -81,7 +81,7 @@ import PropTypes from 'prop-types';
 
 		render() {
 			var username = Profile.getName();
-			if(username == "")
+			if(username === "")
 			{
 				let q = <p className="text-danger">{this.state.error}</p>
 				let r = <p className = "text-danger"> {this.state.rerror}</p>
@@ -119,6 +119,33 @@ import PropTypes from 'prop-types';
 						</form>
 					</div>
 				);
+			}
+			else if(username == "admin")
+			{
+				return (
+					<div>
+						<nav className="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center">
+							<ul className="navbar-nav">
+								<li className="nav-item">
+								<Link to = "/" className="nav-link">Home</Link>
+								</li>
+								<li className="nav-item">
+								<Link to = "/viewQuizzes" className="nav-link">View Quiz</Link>
+								</li>
+								<li className="nav-item">
+								<Link to = "/createQuiz" className="nav-link">Create Quiz</Link>
+								</li>
+								<li className = "nav-item">
+								<Link to = "/viewUsers" className = "nav-link">View Users</Link>
+								</li>
+								<li className = "nav-item">
+								<Link to = "/signout" className = "nav-link">Signout</Link>
+								</li>
+							</ul>
+						</nav>
+						<h1> You are already Logged in </h1>
+					</div>
+				)
 			}
 			else
 			{
