@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Profile from './profile';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -33,27 +32,28 @@ class View_Quizzes extends Component {
         this.context.router.history.push("/")    
       }
 
-      handleEdit = () => {
+      handleEdit = (event) => {
+            event.preventDefault()
+          if(this.state.name == null)
+                return
           this.context.router.history.push('/editQuiz/' + this.state.name)
       }
 
       handleClick = (id, name) => {
-        this.state.id = id;
-        this.state.name = name;
+        this.setState({id : id})
+        this.setState({name : name})
       }
         
       render () {
-        var username = Profile.getName();
+        var username = localStorage.getItem("username")
         if(username == "admin")
         {
             let click = this.handleClick;
             return (
                 <div className="App">
-                    <nav className="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center">
+                    <nav className="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center fixed-top">
+                        <Link className = "navbar-brand" to = "/">My Quiz App</Link>
                         <ul className="navbar-nav">
-                            <li className="nav-item">
-                            <Link to = "/" className="nav-link">Home</Link>
-                            </li>
                             <li className="nav-item">
                             <Link to = "/viewQuizzes" className="nav-link">View Quiz</Link>
                             </li>
@@ -68,35 +68,36 @@ class View_Quizzes extends Component {
                             </li>
                         </ul>
                     </nav>
-                     <header className="App-header">
-                        <h1 className="App-title">All Quizzes</h1>
-                    </header>
 
-                    <form>
-                        <table className="table table-dark">
-                            <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Genre</th>
-                                <th>Select</th>
-                            </tr>
-                            </thead>
-                            <tbody>{this.state.data.map(function(item, key) {
-                                return (
-                                    <tr key = {key}>
-                                        <td>{item.id}</td>
-                                        <td>{item.name}</td>
-                                        <td>{item.genre}</td> 
-                                        <td><input name = "q" type="radio"  onClick = {() => click(item.id, item.name)}/></td> 
-                                    </tr>
-                                )
-                            })}
-                                <button className = "btn btn-default" onClick = {this.handleDelete}> Delete </button>
-                                <button className = "btn btn-default" onClick = {this.handleEdit}> Edit </button>
-                            </tbody>
-                        </table>
-                    </form>
+                    <br/>
+                    <div className = "container">
+                        <h2 className="style-1 mt-5">All Quizzes</h2>
+                        <form>
+                            <table className="table table-hover">
+                                <thead className = "thead-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Genre</th>
+                                    <th>Select</th>
+                                </tr>
+                                </thead>
+                                <tbody>{this.state.data.map(function(item, key) {
+                                    return (
+                                        <tr key = {key} className = "table-success">
+                                            <td>{item.id}</td>
+                                            <td>{item.name}</td>
+                                            <td>{item.genre}</td> 
+                                            <td><input name = "q" type="radio"  onClick = {() => click(item.id, item.name)}/></td> 
+                                        </tr>
+                                    )
+                                })}
+                                </tbody>
+                                </table>
+                                <button className = "btn btn-danger" onClick = {this.handleDelete}> Delete </button>
+                                <button className = "btn btn-warning" onClick = {this.handleEdit}> Edit </button>
+                        </form>
+                    </div>
                 </div>
             );
         }
@@ -104,8 +105,8 @@ class View_Quizzes extends Component {
         {
             return (
                 <div>
-                    <h1>Access Denied</h1>
-                    <nav className="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center">
+                    <nav className="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center fixed-top">
+                        <Link className = "navbar-brand" to = "/">My Quiz App</Link>
                         <ul className="navbar-nav">
                             <li className="nav-item">
                             <Link to = "/" className="nav-link">Home</Link>
@@ -115,6 +116,8 @@ class View_Quizzes extends Component {
                             </li>
                         </ul>
                     </nav>
+                    <br/>
+                    <h1 className = "style-1 mt-5">Access Denied</h1>
                 </div>
             )
         }

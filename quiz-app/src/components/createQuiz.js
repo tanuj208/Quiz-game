@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Profile from './profile';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -48,17 +47,15 @@ class Create_Quiz extends Component {
     }
 
     render () {
-        var username = Profile.getName();
+        var username = localStorage.getItem("username")
         if(username == "admin")
         {
             let q = <p className="text-danger">{this.state.error}</p>
             return (
                     <div>
-                    <nav className="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center">
+                    <nav className="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center fixed-top">
+                        <Link className = "navbar-brand" to = "/">My Quiz App</Link>
                         <ul className="navbar-nav">
-                            <li className="nav-item">
-                            <Link to = "/" className="nav-link">Home</Link>
-                            </li>
                             <li className="nav-item">
                             <Link to = "/viewQuizzes" className="nav-link">View Quiz</Link>
                             </li>
@@ -73,7 +70,8 @@ class Create_Quiz extends Component {
                             </li>
                         </ul>
                     </nav>
-                    <h1> Create Quiz </h1>
+                    <br/>
+                    <h2 className = "style-1 mt-5">Create Quiz</h2>
                     <form onSubmit = {this.handleSubmit}>
                         <div className = "form-group">
                             <label for = "name">Quiz Name:</label>
@@ -98,17 +96,16 @@ class Create_Quiz extends Component {
         {
             return(
                 <div>
-                    <h1>Access Denied</h1>
-                    <nav className="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center">
+                    <nav className="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center fixed-top">
+                        <Link className = "navbar-brand" to = "/">My Quiz App</Link>
                         <ul className="navbar-nav">
-                            <li className="nav-item">
-                            <Link to = "/" className="nav-link">Home</Link>
-                            </li>
                             <li className = "nav-item">
-                            <Link to = "/signup" className = "nav-link">Login/Signup</Link>
+                                <Link to = "/signup" className = "nav-link">Login/Signup</Link>
                             </li>
                         </ul>
                     </nav>
+                <br/>
+                <h1 className = "display-1 mt-5"> Access Denied </h1>
                 </div>
             )
         }

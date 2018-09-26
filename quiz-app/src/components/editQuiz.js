@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Profile from './profile';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -15,7 +14,7 @@ class Edit_Quiz extends Component {
     }
     componentDidMount = () => {
         let quizName = this.props.match.params.quizName
-        const request = new Request('http://127.0.0.1:8080/editQuiz/'+{quizName});
+        const request = new Request('http://127.0.0.1:8080/editQuiz/'+quizName);
         fetch(request)
           .then(response => response.json())
             .then(data => this.setState({data: data}));
@@ -38,18 +37,8 @@ class Edit_Quiz extends Component {
 
     handleEvent = (event) => {
         event.preventDefault()
-        let url = 'http://localhost:8080/editQuiz/' + this.props.match.params.quizName
-        let url2 = '/editQues/' + this.props.match.params.quizName + '/'
-        fetch(url,{
-        method : 'POST',
-    })
-            .then(response => {
-                if(response.status >= 200 && response.status <= 300)
-                {
-                    response.json()
-                    .then(data => {this.context.router.history.push(url2 + data)})
-                }
-            })
+        let url = '/addQues/' + this.props.match.params.quizName
+        this.context.router.history.push(url)
     }
 
     handleDelete = (event) => {
@@ -58,21 +47,19 @@ class Edit_Quiz extends Component {
         fetch(url, {
             method : 'DELETE',
         })
-        this.context.router.history.push("/")
+        this.context.router.history.push("/viewQuizzes")
     }
 
     render() {
-        var username = Profile.getName();
+        var username = localStorage.getItem("username");
         let addId = this.setid
         if(username == "admin")
         {
             return (
                 <div>
-                    <nav className="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center">
+                    <nav className="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center fixed-top">
+                        <Link className = "navbar-brand" to = "/">My Quiz App</Link>
                         <ul className="navbar-nav">
-                            <li className="nav-item">
-                            <Link to = "/" className="nav-link">Home</Link>
-                            </li>
                             <li className="nav-item">
                             <Link to = "/viewQuizzes" className="nav-link">View Quiz</Link>
                             </li>
@@ -87,35 +74,39 @@ class Edit_Quiz extends Component {
                             </li>
                         </ul>
                     </nav>
-                    <table className = "table table-dark">
-                        <thead>
-                            <tr>
-                                <th>Qno</th>
-                                <th>Statement</th>
-                                <th>Option A</th>
-                                <th>Option B</th>
-                                <th>Option C</th>
-                                <th>Option D</th>
-                                <th>Select</th> 
-                            </tr>
-                        </thead>
-                        <tbody>{this.state.data.map(function(item, key) {
-                            return (
-                                <tr key = {key}>
-                                    <td>{key+1}</td>
-                                    <td>{item.statement}</td>
-                                    <td>{item.opa}</td>
-                                    <td>{item.opb}</td>
-                                    <td>{item.opc}</td>
-                                    <td>{item.opd}</td>
-                                    <td><input type="radio" name = "q" onClick = {() => addId(item.id)}/></td> 
+                    <br/>
+                    <h2 className = "style-1 mt-5">Edit Quiz</h2>
+                    <div className = "container">
+                        <table className = "table table-hover">
+                            <thead className = "thead-dark">
+                                <tr>
+                                    <th>Qno</th>
+                                    <th>Statement</th>
+                                    <th>Option A</th>
+                                    <th>Option B</th>
+                                    <th>Option C</th>
+                                    <th>Option D</th>
+                                    <th>Select</th> 
                                 </tr>
-                                )})}
-                        </tbody>
-                    </table>
-                    <button className = "btn btn-primary" onClick = {this.handleEdit}>Edit Question</button>
-                    <button className = "btn btn-primary" onClick = {this.handleEvent}>Add a new Question</button>
-                    <button className = "btn btn-primary" onClick = {this.handleDelete}>Delete Question</button>
+                            </thead>
+                            <tbody>{this.state.data.map(function(item, key) {
+                                return (
+                                    <tr key = {key} className = "table-primary">
+                                        <td>{key+1}</td>
+                                        <td>{item.statement}</td>
+                                        <td>{item.opa}</td>
+                                        <td>{item.opb}</td>
+                                        <td>{item.opc}</td>
+                                        <td>{item.opd}</td>
+                                        <td><input type="radio" name = "q" onClick = {() => addId(item.id)}/></td> 
+                                    </tr>
+                                    )})}
+                            </tbody>
+                        </table>
+                        <button className = "btn btn-warning" onClick = {this.handleEdit}>Edit Question</button>
+                        <button className = "btn btn-success" onClick = {this.handleEvent}>Add a new Question</button>
+                        <button className = "btn btn-danger" onClick = {this.handleDelete}>Delete Question</button>
+                    </div>
                 </div>
             )
         }
@@ -123,7 +114,8 @@ class Edit_Quiz extends Component {
         {
             return (
                 <div>
-                    <nav className="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center">
+                    <nav className="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center fixed-top">
+                        <Link className = "navbar-brand" to = "/">My Quiz App</Link>
                         <ul className="navbar-nav">
                             <li className="nav-item">
                             <Link to = "/" className="nav-link">Home</Link>
@@ -133,7 +125,8 @@ class Edit_Quiz extends Component {
                             </li>
                         </ul>
                     </nav>
-                    <h1> Access Denied </h1>
+                    <br/>
+                    <h1 className = "display-1 mt-5"> Access Denied </h1>
                 </div>
             )
         }

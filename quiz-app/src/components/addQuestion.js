@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-class Edit_Ques extends Component {
+class Add_Ques extends Component {
     constructor() {
         super();
         this.state = {
@@ -22,13 +22,6 @@ class Edit_Ques extends Component {
         }
     }
 
-    componentDidMount() {
-        const request = new Request('http://127.0.0.1:8080/editQues/' + this.props.match.params.quizName + '/' + this.props.match.params.qid);
-        fetch(request)
-          .then(response => response.json())
-            .then(data => this.setState({data: data}));
-      }
-    
     static contextTypes = {
         router : PropTypes.object,
     }
@@ -37,7 +30,7 @@ class Edit_Ques extends Component {
         event.preventDefault()
 
         let url = "/editQuiz/"+this.props.match.params.quizName        
-        const request = 'http://localhost:8080/editQues/'+this.props.match.params.quizName+ '/' + this.props.match.params.qid
+        const request = 'http://localhost:8080/addQues/'+this.props.match.params.quizName
         fetch(request, {
             method : 'POST',
             body : JSON.stringify(this.state.data)
@@ -121,15 +114,17 @@ class Edit_Ques extends Component {
     }
 
     render () {
-        var username = localStorage.getItem("username");
+        var username = localStorage.getItem("username")
         let r = <p className = "text-danger"> {this.state.error}</p>
-        if(username == "admin")
+        if(username === "admin")
         {
             return (
                 <div>
-                    <nav className="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center fixed-top">
-                        <Link className = "navbar-brand" to = "/">My Quiz App</Link>
+                    <nav className="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center">
                         <ul className="navbar-nav">
+                            <li className="nav-item">
+                            <Link to = "/" className="nav-link">Home</Link>
+                            </li>
                             <li className="nav-item">
                             <Link to = "/viewQuizzes" className="nav-link">View Quiz</Link>
                             </li>
@@ -145,34 +140,34 @@ class Edit_Ques extends Component {
                         </ul>
                     </nav>
                     <br/>
-                    <h2 className = "style-1 mt-5"> Edit question </h2>
+                    <h2 className="style-1 mt-5">Add Question</h2>
                     <div class = "container bg-light rounded">
                         <form onSubmit = {this.handleSubmit}>
                         <div className = "form-group">
                             <label for = "ques">Question:</label>
-                            <textarea type = "text" class = "form-control" value = {this.state.data.statement} onChange = {this.StatementChange}/>
+                            <textarea type = "text" class = "form-control" onChange = {this.StatementChange}/>
                         </div>
                         <div className = "form-group">
                             <label for = "opa">Option A:</label>
-                            <input type = "text" class = "form-control" value = {this.state.data.opa} onChange = {this.OptionA_Change}/>
-                            <input type="checkbox" class="form-check-input" id="opa" checked = {this.state.data.ansa} onChange = {this.ansA}/>Correct
+                            <input type = "text" class = "form-control" onChange = {this.OptionA_Change}/>
+                            <input type="checkbox" class="form-check-input" id="opa" onChange = {this.ansA}/>Correct
                         </div>
                         <div className = "form-group">
                             <label for = "opb">Option B:</label>
-                            <input type = "text" class = "form-control" value = {this.state.data.opb} onChange = {this.OptionB_Change}/>
-                            <input type="checkbox" class="form-check-input" id="opb" checked = {this.state.data.ansb} onChange = {this.ansB}/>Correct
+                            <input type = "text" class = "form-control" onChange = {this.OptionB_Change}/>
+                            <input type="checkbox" class="form-check-input" id="opb" onChange = {this.ansB}/>Correct
                         </div>
                         <div className = "form-group">
                             <label for = "opc">Option C:</label>
-                            <input type = "text" class = "form-control" value = {this.state.data.opc} onChange = {this.OptionC_Change}/>
-                            <input type="checkbox" class="form-check-input" id="opc" checked = {this.state.data.ansc} onChange = {this.ansC}/>Correct
+                            <input type = "text" class = "form-control" onChange = {this.OptionC_Change}/>
+                            <input type="checkbox" class="form-check-input" id="opc" onChange = {this.ansC}/>Correct
                         </div>
                         <div className = "form-group">
                             <label for = "opd">Option D:</label>
                             <input type = "text" class = "form-control" value = {this.state.data.opd} onChange = {this.OptionD_Change}/>
-                            <input type="checkbox" class="form-check-input" id="opd" checked = {this.state.data.ansd} onChange = {this.ansD}/>Correct
+                            <input type="checkbox" class="form-check-input" id="opd" onChange = {this.ansD}/>Correct
                         </div>
-                        <button type = "submit" className = "btn btn-warning"> Add </button> 
+                        <button type = "submit" className = "btn btn-success"> Add </button> 
                         {r}
                     </form>
                     </div>
@@ -183,20 +178,22 @@ class Edit_Ques extends Component {
         {
             return (
                 <div>
-                    <nav className="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center fixed-top">
-                        <Link className = "navbar-brand" to = "/">My Quiz App</Link>
+                    <nav className="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center">
                         <ul className="navbar-nav">
+                            <li className="nav-item">
+                            <Link to = "/" className="nav-link">Home</Link>
+                            </li>
                             <li className = "nav-item">
                             <Link to = "/signup" className = "nav-link">Login/Signup</Link>
                             </li>
                         </ul>
                     </nav>
                     <br/>
-                    <h1 className = "display-1 mt-5">Access Denied</h1>
+                    <h1 className = "style-1 mt-5">Access Denied</h1>
                 </div>
             )
         }
     }
 
 }
-export default Edit_Ques
+export default Add_Ques

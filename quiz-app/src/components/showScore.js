@@ -1,33 +1,40 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-class Signout extends Component {
+class Show_Score extends Component {
 
-    logout = () => {
-        localStorage.clear()
-    }
     render() {
         let username = localStorage.getItem("username")
-        if(username == null)
+        let a = this.props.match.params.sc
+        let b = this.props.match.params.t
+        if(username != null)
         {
-            return (
+            return(
                 <div>
                     <nav className="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center fixed-top">
                         <Link className = "navbar-brand" to = "/">My Quiz App</Link>
                         <ul className="navbar-nav">
+                            <li className="nav-item">
+                                <Link to = "/attempt" className="nav-link">Attempt Quiz</Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link to = "/leaderboard" className="nav-link">Leaderboards</Link>
+                            </li>
                             <li className = "nav-item">
-                            <Link to = "/signup" className = "nav-link">Login/Signup</Link>
+                                <Link to = "/prevQuizzes" className = "nav-link">Previous Quizzes</Link>
+                            </li>
+                            <li className = "nav-item">
+                                <Link to = "/signout" className = "nav-link">Signout</Link>
                             </li>
                         </ul>
                     </nav>
                     <br/>
-                    <h1 className = "style-1 mt-5"> You are already logged out </h1>
+                    <h1 className = "display-1 mt-5"> You scored {a} out of {b} </h1>
                 </div>
             )
         }
         else
         {
-            this.logout()
             return (
                 <div>
                     <nav className="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center fixed-top">
@@ -39,11 +46,12 @@ class Signout extends Component {
                         </ul>
                     </nav>
                     <br/>
-                    <h1 className = "style-1 mt-5"> You have been logged out </h1>
+                    <div className = "container">
+                        <h1 className = "display-1 mt-5"> Please Login first </h1>
+                    </div>
                 </div>
             )
         }
     }
-    
 }
-export default Signout
+export default Show_Score;

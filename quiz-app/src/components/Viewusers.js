@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Profile from './profile';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
@@ -33,21 +32,21 @@ class View_Users extends Component {
       }
 
       handleClick = (id) => {
+        if(id == 1)
+           return
         this.state.id.push(id);
       }
         
       render () {
-        var username = Profile.getName();
+        var username = localStorage.getItem("username")
         if(username == "admin")
         {
             let deleteRow = this.handleClick;
             return (
                 <div className="App">
-                    <nav className="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center">
+                    <nav className="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center fixed-top">
+                        <Link className = "navbar-brand" to = "/">My Quiz App</Link>
                         <ul className="navbar-nav">
-                            <li className="nav-item">
-                            <Link to = "/" className="nav-link">Home</Link>
-                            </li>
                             <li className="nav-item">
                             <Link to = "/viewQuizzes" className="nav-link">View Quiz</Link>
                             </li>
@@ -62,32 +61,32 @@ class View_Users extends Component {
                             </li>
                         </ul>
                     </nav>
-                     <header className="App-header">
-                        <h1 className="App-title">View All Users</h1>
-                    </header>
-
-                    <form onSubmit = {this.handleSubmit}>
-                        <table className="table table-dark">
-                            <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Username</th>
-                                <th> Delete user </th>
-                            </tr>
-                            </thead>
-                            <tbody>{this.state.data.map(function(item, key) {
-                                return (
-                                    <tr key = {key}>
-                                        <td>{item.id}</td>
-                                        <td>{item.username}</td>
-                                        <td><input type="radio"  onClick = {() => deleteRow(item.id)}/></td> 
-                                    </tr>
-                                )
-                            })}
-                                <button type = "submit" className = "btn btn-default btn-block"> Submit </button>
-                            </tbody>
-                        </table>
-                    </form>
+                    <br/>
+                    <div className = "container">
+                        <h1 className="style-1 mt-5">View All Users</h1>
+                        <form onSubmit = {this.handleSubmit}>
+                            <table className="table table-hover">
+                                <thead className = "thead-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Username</th>
+                                    <th> Delete user </th>
+                                </tr>
+                                </thead>
+                                <tbody>{this.state.data.map(function(item, key) {
+                                    return (
+                                        <tr key = {key} className = "table-danger">
+                                            <td>{item.id}</td>
+                                            <td>{item.username}</td>
+                                            <td><input type="radio"  onClick = {() => deleteRow(item.id)}/></td> 
+                                        </tr>
+                                    )
+                                })}
+                                </tbody>
+                            </table>
+                            <button type = "submit" className = "btn btn-danger"> Delete </button>
+                        </form>
+                    </div>
                 </div>
             );
         }
@@ -95,17 +94,16 @@ class View_Users extends Component {
         {
             return(
             <div>
-                <nav className="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center">
-                <ul className="navbar-nav">
-                    <li className="nav-item">
-                    <Link to = "/" className="nav-link">Home</Link>
-                    </li>
-                    <li className = "nav-item">
-                    <Link to = "/signup" className = "nav-link">Login/Signup</Link>
-                    </li>
-                </ul>
+                <nav className="navbar navbar-expand-sm bg-dark navbar-dark justify-content-center fixed-top">
+                    <Link className = "navbar-brand" to = "/">My Quiz App</Link>
+                    <ul className="navbar-nav">
+                        <li className = "nav-item">
+                        <Link to = "/signup" className = "nav-link">Login/Signup</Link>
+                        </li>
+                    </ul>
                 </nav>
-                <h1>Access Denied</h1>
+                <br/>
+                <h1 className = "style-1 mt-5">Access Denied</h1>
             </div>
             )
         }
