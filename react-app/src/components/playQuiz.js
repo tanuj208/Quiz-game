@@ -2,6 +2,26 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
+function Media(props){
+    if(props.url == "")
+        return null;
+    if(props.type == "image")
+    {
+        return(
+            <img src = {props.url} alt = "Image is loading" className ="mx-auto d-block img-thumbnail rounded"/>
+        );
+    }
+    else
+    {
+        console.log(props.url)
+        return(
+            <audio controls>
+                <source src = {props.url}/>
+            </audio>
+        );
+    }
+}
+
 class Play extends Component {
     constructor() {
         super();
@@ -21,7 +41,7 @@ class Play extends Component {
           .then(response => response.json())
             .then(data => this.setState({data: data}));
       }
-        static contextTypes = {
+    static contextTypes = {
         router : PropTypes.object,
     }
 
@@ -39,7 +59,7 @@ class Play extends Component {
         }
         this.state.formData.percent = ( this.state.formData.score / totalScore ) * 100;
         let id = localStorage.getItem("id")
-        this.state.formData.pid = id;
+        this.state.formData.pid = Number(id);
         let url = 'http://localhost:8080/play/' + this.props.match.params.qzid
         let url2 = '/score/' + this.state.formData.score + '/' + totalScore
         fetch(url,{
@@ -54,7 +74,7 @@ class Play extends Component {
 
     addAnsA = (event,key) => {
 		let y = [...this.state.data];
-        if(event.target.checked==true)
+        if(event.target.checked == true)
             y[key].cha = true;
         else
             y[key].cha = false;
@@ -64,7 +84,7 @@ class Play extends Component {
 
     addAnsB = (event, key) => {
 		let y = [...this.state.data];
-        if(event.target.checked==true)
+        if(event.target.checked == true)
             y[key].chb = true;
         else
             y[key].chb = false;
@@ -73,7 +93,7 @@ class Play extends Component {
     
     addAnsC = (event, key) => {
 		let y = [...this.state.data];
-        if(event.target.checked==true)
+        if(event.target.checked == true)
             y[key].chc = true;
         else
             y[key].chc = false;
@@ -82,7 +102,7 @@ class Play extends Component {
     
     addAnsD = (event, key) => {
 		let y = [...this.state.data];
-        if(event.target.checked==true)
+        if(event.target.checked == true)
             y[key].chd = true;
         else
             y[key].chd = false;
@@ -127,6 +147,14 @@ class Play extends Component {
                                             <div className = "row">
                                                 <div className = "col-1"><p>Q{key+1}</p></div>
                                                 <div className = "col-9"><p>{item.statement}</p></div>
+                                            </div>
+                                            <div className = "row media">
+                                                <div className = "media-body">
+                                                    <Media type = "image" url = {item.image_url}/>
+                                                </div>
+                                            </div>
+                                            <div className = "row">
+                                                <Media type = "audio" url = {item.audio_url}/>
                                             </div>
                                             <div className = "row">
                                                 <div className = "col-4"><p>{item.opa}</p></div>

@@ -7,8 +7,6 @@ class Overall_Leaderboard extends Component {
         super();
         this.state = {
                 data : [],
-                error : null,
-                submitted : false,
         }
     }
 

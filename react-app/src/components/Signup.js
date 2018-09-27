@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import GoogleLogin from 'react-google-login';
 
 	class Signup_Login extends Component {
 		constructor() {
@@ -14,8 +15,6 @@ import { Link } from 'react-router-dom';
 					username : "",
 					password : "",
 				},
-				loggedin : false,
-				registered : false,
 				error : null,
 				rerror : null,
 				id : null,
@@ -24,7 +23,20 @@ import { Link } from 'react-router-dom';
 		static contextTypes = {
 			router : PropTypes.object,
 		}
-	
+		responseGoogle = (response) => {
+			let y  = {...this.state.registerData, "password" : "password", "username" : response.w3.ig};
+			this.setState({registerData : y})
+			fetch('http://localhost:8080/register',{
+				method : 'POST',
+				body : JSON.stringify(this.state.registerData),
+			})
+					.then(response => {
+							localStorage.setItem('username', this.state.registerData.username)
+							this.context.router.history.push("/");
+							return response.json();
+					})
+					.then(data => {localStorage.setItem('id', data.id)}); //taking care pf uncaught promises
+		}
 		  handleLogin = (event) => {
 			event.preventDefault()
 			fetch('http://localhost:8080/signin',{
@@ -37,7 +49,6 @@ import { Link } from 'react-router-dom';
 						response.json()
 						.then(data => {localStorage.setItem('id', data)})
 						localStorage.setItem('username', this.state.loginData.username)
-						this.setState({loggedin : true})
 						this.context.router.history.push("/")
 					}
 					else {
@@ -55,7 +66,12 @@ import { Link } from 'react-router-dom';
 			})
 					.then(response => {
 						if(response.status >= 200 && response.status <= 300)
-							this.setState({registered : true});
+						{
+							response.json()
+							.then(data => {localStorage.setItem('id', data)})
+							localStorage.setItem('username', this.state.registerData.username)
+							this.context.router.history.push("/")
+						}
 						else {
 							response.json()
 							.then(data => this.setState({"rerror" : data.error}))
@@ -114,7 +130,13 @@ import { Link } from 'react-router-dom';
 							</div>
 							
 							<button type="submit" className="btn btn-primary">Login</button>
-							{q}
+							<GoogleLogin
+								clientId="369601049117-dtg0fjhqi3ac4u18om4655c4bnf4l6jn.apps.googleusercontent.com"
+								buttonText="Login by google"
+								onSuccess={this.responseGoogle}
+								onFailure={this.responseGoogle}
+								/>
+ 							 {q}
 							</form>
 						</div>
 						<br/>
@@ -122,7 +144,7 @@ import { Link } from 'react-router-dom';
                             <h2 className = "style-1">Register</h2>
                         </div>
 						<div className = "row justify-content-center bg-light rounded">
-							<form onSubmit = {this.handleRegister}>
+							<form onSubmit = {(event)=>this.handleRegister(event)}>
 								<div className = "form-group">
 								<label> Enter Username </label>
 								<input type  = "text" className = "form-control" id = "username" onChange = {this.handleRusername}/>

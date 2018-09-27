@@ -8,6 +8,8 @@ class Add_Ques extends Component {
         this.state = {
                 data : {
                     statement : "",
+                    image_url : "",
+                    audio_url : "",
                     opa : "",
                     opb : "",
                     opc : "",
@@ -50,6 +52,16 @@ class Add_Ques extends Component {
 
     StatementChange = (event) => {
 		let y = {...this.state.data , "statement" : event.target.value};
+		this.setState({data : y})
+    }
+
+    Audio_urlChange = (event) => {
+		let y = {...this.state.data , "audio_url" : event.target.value};
+		this.setState({data : y})
+    }
+
+    Image_urlChange = (event) => {
+		let y = {...this.state.data , "image_url" : event.target.value};
 		this.setState({data : y})
     }
 
@@ -147,26 +159,41 @@ class Add_Ques extends Component {
                             <label for = "ques">Question:</label>
                             <textarea type = "text" class = "form-control" onChange = {this.StatementChange}/>
                         </div>
+
+                        <div className = "form-group">
+                            <label for = "ques">Image URL(if applicable):</label>
+                            <input type = "text" class = "form-control" onChange = {this.Image_urlChange}/>
+                        </div>
+
+                        <div className = "form-group">
+                            <label for = "ques">Sound URL(if applicable):</label>
+                            <input type = "text" class = "form-control" onChange = {this.Audio_urlChange}/>
+                        </div>
+
                         <div className = "form-group">
                             <label for = "opa">Option A:</label>
                             <input type = "text" class = "form-control" onChange = {this.OptionA_Change}/>
                             <input type="checkbox" class="form-check-input" id="opa" onChange = {this.ansA}/>Correct
                         </div>
+
                         <div className = "form-group">
                             <label for = "opb">Option B:</label>
                             <input type = "text" class = "form-control" onChange = {this.OptionB_Change}/>
                             <input type="checkbox" class="form-check-input" id="opb" onChange = {this.ansB}/>Correct
                         </div>
+
                         <div className = "form-group">
                             <label for = "opc">Option C:</label>
                             <input type = "text" class = "form-control" onChange = {this.OptionC_Change}/>
                             <input type="checkbox" class="form-check-input" id="opc" onChange = {this.ansC}/>Correct
                         </div>
+
                         <div className = "form-group">
                             <label for = "opd">Option D:</label>
                             <input type = "text" class = "form-control" value = {this.state.data.opd} onChange = {this.OptionD_Change}/>
                             <input type="checkbox" class="form-check-input" id="opd" onChange = {this.ansD}/>Correct
                         </div>
+
                         <button type = "submit" className = "btn btn-success"> Add </button> 
                         {r}
                     </form>

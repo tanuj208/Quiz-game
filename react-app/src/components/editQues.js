@@ -8,6 +8,8 @@ class Edit_Ques extends Component {
         this.state = {
                 data : {
                     statement : "",
+                    audio_url : "",
+                    image_url : "",
                     opa : "",
                     opb : "",
                     opc : "",
@@ -57,6 +59,16 @@ class Edit_Ques extends Component {
 
     StatementChange = (event) => {
 		let y = {...this.state.data , "statement" : event.target.value};
+		this.setState({data : y})
+    }
+
+    Audio_UrlChange = (event) => {
+		let y = {...this.state.data , "audio_url" : event.target.value};
+		this.setState({data : y})
+    }
+
+    Image_UrlChange = (event) => {
+		let y = {...this.state.data , "image_url" : event.target.value};
 		this.setState({data : y})
     }
 
@@ -151,6 +163,14 @@ class Edit_Ques extends Component {
                         <div className = "form-group">
                             <label for = "ques">Question:</label>
                             <textarea type = "text" class = "form-control" value = {this.state.data.statement} onChange = {this.StatementChange}/>
+                        </div>
+                        <div className = "form-group">
+                            <label for = "image_url">Image URL(if applicable):</label>
+                            <input type = "text" class = "form-control" value = {this.state.data.image_url} onChange = {this.Image_UrlChange}/>
+                        </div>
+                        <div className = "form-group">
+                            <label for = "audio_url">Audio URL(if applicable):</label>
+                            <input type = "text" class = "form-control" value = {this.state.data.audio_url} onChange = {this.Audio_UrlChange}/>
                         </div>
                         <div className = "form-group">
                             <label for = "opa">Option A:</label>

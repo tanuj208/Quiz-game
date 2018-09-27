@@ -23,13 +23,15 @@ class View_Quizzes extends Component {
         }
 
         handleDelete = (event) => {
+        event.preventDefault()
         if(this.state.id == null)
             return;
-        event.preventDefault()
         fetch('http://localhost:8080/viewQuizzes/'+this.state.id, {
             method: 'DELETE',
-          })
-        this.context.router.history.push("/")    
+          }).then(response => {
+              if(response.status >=200 && response.status <=300)
+                  window.location.reload()
+                });
       }
 
       handleEdit = (event) => {

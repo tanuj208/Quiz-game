@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strconv"
 
+	"golang.org/x/crypto/bcrypt"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
@@ -29,6 +31,8 @@ type Quiz struct {
 type Question struct {
 	ID        int    `json:"id"`
 	Statement string `json:"statement"`
+	Image_url string `json:"image_url"`
+	Audio_url string `json:"audio_url"`
 	Opa       string `json:"opa"`
 	Opb       string `json:"opb"`
 	Opc       string `json:"opc"`
@@ -232,15 +236,24 @@ func CheckDetails(c *gin.Context) {
 	}
 
 	var user User
-	err := db.Where(&User{Username: user2.Username, Password: user2.Password}).First(&user).Error
+
+	err := db.Where(&User{Username: user2.Username}).First(&user).Error
 	if err != nil {
 		c.Header("access-control-allow-origin", "*")
 		c.JSON(400, gin.H{
-			"error": "Invalid Email/Password",
+			"error": "Invalid Email",
 		})
 	} else {
-		c.Header("access-control-allow-origin", "*")
-		c.JSON(200, user.ID)
+		errr := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(user2.Password))
+		if errr == nil {
+			c.Header("access-control-allow-origin", "*")
+			c.JSON(200, user.ID)
+		} else {
+			c.Header("access-control-allow-origin", "*")
+			c.JSON(400, gin.H{
+				"error": "Invalid Password",
+			})
+		}
 	}
 }
 
@@ -262,11 +275,21 @@ func RegisterDetails(c *gin.Context) {
 		c.Header("access-control-allow-origin", "*")
 		c.JSON(400, gin.H{
 			"error": "Username exists",
+			"id":    user.ID,
 		})
 	} else {
-		c.Header("access-control-allow-origin", "*")
-		db.Create(&user2)
-		c.JSON(200, user)
+		hash, errr := bcrypt.GenerateFromPassword([]byte(user2.Password), bcrypt.MinCost)
+		if errr == nil {
+			user2.Password = string(hash)
+			c.Header("access-control-allow-origin", "*")
+			db.Create(&user2)
+			c.JSON(200, user2.ID)
+		} else {
+			c.Header("access-control-allow-origin", "*")
+			c.JSON(400, gin.H{
+				"error": "some error occurred",
+			})
+		}
 	}
 }
 

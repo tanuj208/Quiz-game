@@ -46,8 +46,10 @@ class Edit_Quiz extends Component {
         let url = 'http://localhost:8080/editQuiz/' + this.props.match.params.quizName + '/' + this.state.ques
         fetch(url, {
             method : 'DELETE',
-        })
-        this.context.router.history.push("/viewQuizzes")
+        }).then(response => {
+            if(response.status >=200 && response.status <=300)
+                window.location.reload()
+              });
     }
 
     render() {
